@@ -17,7 +17,7 @@ if [ ! -f docker-compose.yml ]; then
     exit 1
 fi
 
-AWS_REGION=$(aws configure get region)
+AWS_REGION=$(aws configure get region 2>/dev/null || true)
 
 if [ -z "$AWS_REGION" ]; then
     TOKEN=$(curl -sX PUT \
