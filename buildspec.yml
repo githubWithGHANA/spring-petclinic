@@ -25,3 +25,7 @@ phases:
       - echo "Pushing Docker image to ECR..."
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/spring-petclinic:$IMAGE_TAG
       - echo "Build completed."
+
+artifacts:
+  files:
+    - '**/*'

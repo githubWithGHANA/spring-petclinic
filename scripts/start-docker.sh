@@ -5,7 +5,11 @@ echo "Starting Spring Petclinic..."
 
 AWS_REGION=$(aws configure get region)
 if [ -z "$AWS_REGION" ]; then
-    AWS_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/region)
+    TOKEN=$(curl -sX PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+    AWS_REGION=$(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/region)
+fi
+if [ -z "$AWS_REGION" ]; then
+    AWS_REGION="ap-south-1"
 fi
 
 AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
