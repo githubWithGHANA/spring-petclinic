@@ -1,16 +1,23 @@
 #!/bin/bash
-set -e
 
 echo "Stopping Spring Petclinic..."
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$SCRIPT_DIR/.."
+DEPLOY_DIR="$SCRIPT_DIR/.."
 
-if [ ! -f docker-compose.yml ]; then
-    echo "ERROR: docker-compose.yml not found in $(pwd)"
-    exit 1
+if [ ! -f "$DEPLOY_DIR/docker-compose.yml" ]; then
+    echo "docker-compose.yml not found."
+    echo "Nothing to stop. Continuing deployment..."
+    exit 0
 fi
 
-docker compose down
+cd "$DEPLOY_DIR"
+
+echo "Using Compose file: $DEPLOY_DIR/docker-compose.yml"
+
+docker compose down || {
+    echo "Docker Compose down failed."
+    exit 1
+}
 
 echo "Spring Petclinic stopped."
