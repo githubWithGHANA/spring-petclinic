@@ -1,11 +1,18 @@
 services:
 
   app:
-    image: ${ECR_REGISTRY}/spring-petclinic:latest
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
+  image: ${ECR_REGISTRY}/spring-petclinic:latest
+  ports:
+    - "8080:8080"
+
+  environment:
+    SPRING_PROFILES_ACTIVE: mysql
+    MYSQL_URL: jdbc:mysql://mysql:3306/petclinic
+    MYSQL_USER: petclinic
+    MYSQL_PASS: petclinic
+
+  depends_on:
+    - mysql
 
   mysql:
     image: mysql:9.7
