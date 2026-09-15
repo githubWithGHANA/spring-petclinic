@@ -1,14 +1,8 @@
 #!/bin/bash
 set -e
 
-echo "Stopping existing Spring Petclinic container..."
+echo "Stopping Spring Petclinic..."
 
-if docker ps -q -f name=spring-petclinic | grep -q .; then
-    docker stop spring-petclinic
-fi
+docker compose down
 
-if docker ps -aq -f name=spring-petclinic | grep -q .; then
-    docker rm spring-petclinic
-fi
-
-echo "Old container removed."
+echo "Spring Petclinic stopped."

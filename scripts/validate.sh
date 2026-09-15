@@ -1,17 +1,27 @@
 #!/bin/bash
 set -e
 
-echo "Waiting for Spring Petclinic to start..."
+echo "Validating Spring Petclinic deployment..."
 
-for i in {1..30}; do
-    if curl -f http://localhost:8080/ >/dev/null 2>&1; then
-        echo "Spring Petclinic is running successfully."
-        exit 0
-    fi
-    echo "Application not ready yet... attempt $i/30"
-    sleep 2
-done
+if ! docker compose ps; then
+    echo "Docker Compose is not running."
+    exit 1
+fi
 
-echo "Application failed to start."
-docker logs spring-petclinic
-exit 1
+if ! docker compose ps | grep -q "Up"; then
+    echo "Containers are not running."
+    docker compose ps
+    exit 1
+fi
+
+echo "Containers are running."
+
+if curl -f http://localhost:8080/ > /dev/null 2>&1; then
+    echo "Spring Petclinic is responding on port 8080."
+else
+    echo "Spring Petclinic is not responding on port 8080."
+    docker compose logs --tail=50
+    exit 1
+fi
+
+echo "Validation successful."
