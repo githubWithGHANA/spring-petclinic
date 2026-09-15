@@ -1,14 +1,14 @@
 #!/bin/bash
 
-echo "Stopping Spring Petclinic..."
+echo "Stopping existing Spring Petclinic container..."
 
-# Stop/remove the old application container if it exists.
-if docker ps -a --format '{{.Names}}' | grep -q '^spring-petclinic$'; then
-    echo "Removing old spring-petclinic container..."
+if docker ps -aq -f name=^spring-petclinic$ | grep -q .; then
+    echo "Removing existing spring-petclinic container..."
     docker rm -f spring-petclinic
 else
-    echo "No spring-petclinic container found."
+    echo "No existing spring-petclinic container found."
 fi
 
 echo "ApplicationStop completed successfully."
+
 exit 0
