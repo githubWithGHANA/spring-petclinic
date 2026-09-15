@@ -1,0 +1,27 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_TAG: "latest"
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+  pre_build:
+    commands:
+      - export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+  build:
+    commands:
+      - echo "Building Spring Petclinic..."
+      - chmod +x mvnw
+      - ./mvnw clean package -DskipTests
+      - echo "Building Docker image..."
+      - docker build -t $AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/spring-petclinic:$IMAGE_TAG .
+  post_build:
+    commands:
+      - echo "Pushing Docker image to ECR..."
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/spring-petclinic:$IMAGE_TAG
+      - echo "Build completed."
