@@ -1,7 +1,7 @@
 services:
 
   app:
-    image: ${ECR_REGISTRY}/spring-petclinic:latest
+    image: ${ECR_REGISTRY}/uat-spring-petclinic:latest
     ports:
       - "8080:8080"
 
