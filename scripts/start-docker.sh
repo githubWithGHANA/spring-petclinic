@@ -39,7 +39,7 @@ AWS_ACCOUNT_ID=$(aws sts get-caller-identity \
 
 ECR_REGISTRY="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
 
-IMAGE_NAME="spring-petclinic"
+IMAGE_NAME="uat-spring-petclinic"
 IMAGE_TAG="latest"
 
 export ECR_REGISTRY
