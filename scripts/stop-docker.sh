@@ -4,7 +4,7 @@ echo "Stopping existing Spring Petclinic container..."
 
 if docker ps -aq -f name=^spring-petclinic$ | grep -q .; then
     echo "Removing existing spring-petclinic container..."
-    docker rm -f spring-petclinic
+    docker rm -f uat-spring-petclinic
 else
     echo "No existing spring-petclinic container found."
 fi
